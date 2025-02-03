@@ -1,0 +1,48 @@
+import linkedList
+
+def reorder_students(L):
+    size = L.sizeOfLL()
+    if size <= 2:
+        return
+    position = L.head
+    for _ in range (size//2-1):
+        position = position.next
+
+    last_of_first = position
+    p1 = position.next
+    p2 = p1.next
+    p1.next = None
+    p3 = p2.next   
+
+    while True:
+
+        p2.next = p1
+        p1 = p2
+        if p3 == None:
+            last_of_first.next = p2
+            break
+        p2 = p3
+        p3 = p3.next
+
+    return
+
+def makeList ():
+    num = input()
+    num = int(num)
+    L = linkedList.LinkedList()
+    for _ in range (num):
+        name = input()
+        L.insertAtEnd(name)
+    return L    
+
+def main ():
+    L1 = makeList()
+    L2 = makeList()
+
+    reorder_students(L1)
+    L1.printLL()
+    print()
+    reorder_students(L2)
+    L2.printLL()
+
+main()
