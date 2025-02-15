@@ -13,7 +13,6 @@ class Doubly_Linked_List_Seq:
     def __init__(self):
         self.head = None
         self.tail = None
-        self.dic = dict()
 
     def __iter__(self):
         node = self.head
@@ -46,7 +45,6 @@ class Doubly_Linked_List_Seq:
         else:
             self.tail = node    
         self.head = node
-        self.dic[x] = node
 
     def insert_last(self, x):
         node = Doubly_Linked_List_Node(x)
@@ -57,13 +55,11 @@ class Doubly_Linked_List_Seq:
         else:
             self.head = node     
         self.tail = node
-        self.dic[x] = node      
 
     def delete_first(self):
         x = None
         if self.head != None:
             x = self.head.item
-            self.dic.pop(self.head.item)
             self.head = self.head.next
         if self.head != None:
             self.head.prev = None    
@@ -72,7 +68,6 @@ class Doubly_Linked_List_Seq:
     def delete_last(self):
         x = None
         if self.tail != None:
-            self.dic.pop(self.tail.item)
             x = self.tail.item
             self.tail = self.tail.prev
         if self.tail != None:
@@ -81,60 +76,54 @@ class Doubly_Linked_List_Seq:
 
     def remove(self, x1, x2):
         L2 = Doubly_Linked_List_Seq()
-        node1 = self.dic[x1]
-        node2 = self.dic[x2]
-        L2.head = node1
-        L2.tail = node2
-        if node1.prev == None:
-            self.head = node2.next
-        if node2.next == None:
-            self.tail = None
-        elif node1.prev != None:        
-            node1.prev.next = node2.next
-            node2.next.prev = node1.prev
-        node1.prev = None
-        node2.next = None
-        node = node1
-        while node != None:
-            L2.dic[node.item] = node
-            node = node.next
+        L2.head = x1
+        L2.tail = x2
+        if x1.prev == None:
+            self.head = x2.next
+        if x2.next == None:
+            self.tail = x1.prev
+        elif x1.prev != None:        
+            x1.prev.next = x2.next
+            x2.next.prev = x1.prev
+        x1.prev = None
+        x2.next = None
         return L2
 
     def splice(self, x, L2):
-        node1 = self.dic[x]
-        node2 = L2
-        while node2 and node1:
-            node = Doubly_Linked_List_Node(node1.item)
-            node.next = node1.next
-            node1.next = node
-            node.prev = node1
-            node1 = node1.next
-            node2 = node2.next
-            del node2.prev
-        if node1.next != None:
-            node1.next.prev = node1
+        node = L2.head
+        last = x.next
+        while node :
+            x.next = node
+            node.prev = x
+            node = node.next
+            x = x.next
+        x.next = last
+        if last != None:
+            last.prev = x
+        else:
+            self.tail = x    
 
 
-def main():
-    L = Doubly_Linked_List_Seq()
-    x = input().split()
-    while x:
-        if x[0]=='insert_first':
-            L.insert_first(int(x[1]))
-        elif x[0] == 'insert_last':
-            L.insert_last(int(x[1]))
-        elif x[0] == 'delete_first':
-            L.delete_first()
-        elif x[0] == 'delete_last':
-            L.delete_last()
-        elif x[0] == 'remove':
-            L.remove(x[1], x[2])
-        elif x[0] == 'splice':
-            pass
-        for l in L:
-            print(l, end=' ')
-        print('ok')    
-        x = input().split()    
+# def main():
+#     L = Doubly_Linked_List_Seq()
+#     x = input().split()
+#     while x:
+#         if x[0]=='insert_first':
+#             L.insert_first(int(x[1]))
+#         elif x[0] == 'insert_last':
+#             L.insert_last(int(x[1]))
+#         elif x[0] == 'delete_first':
+#             L.delete_first()
+#         elif x[0] == 'delete_last':
+#             L.delete_last()
+#         elif x[0] == 'remove':
+#             L.remove(x[1], x[2])
+#         elif x[0] == 'splice':
+#             pass
+#         for l in L:
+#             print(l, end=' ')
+#         print('ok')    
+#         x = input().split()    
 
 
-main()    
+# main()    
